@@ -69,28 +69,20 @@ TEST(SimpleCases, BinaryOperatorMultiplies)
 
 TEST(OnlySumAndMinusCases, ASTParser)
 {
-	std::string simpleCase1 = "1+2+3";
-	auto parser1 = ASTParser(simpleCase1);
-	auto AST1 = parser1.ParseString();
-	EXPECT_EQ(AST1->Evaluate(), 6);
+	auto parseExpresion = [](std::string expresion)
+	{
+		auto parser = ASTParser(expresion);
+		auto AST1 = parser.ParseString();
+		return AST1->Evaluate();
+	};
+	
+	EXPECT_EQ(parseExpresion("1+2+3"), 6);
 
-	std::string simpleCase2 = "1+5-9";
-	auto parser2 = ASTParser(simpleCase2);
-	auto AST2 = parser2.ParseString();
-	EXPECT_EQ(AST2->Evaluate(), -3);
+	EXPECT_EQ(parseExpresion("1+5-9"), -3);
 
-	std::string simpleCase3 = "1+7";
-	auto parser3 = ASTParser(simpleCase3);
-	auto AST3 = parser3.ParseString();
-	EXPECT_EQ(AST3->Evaluate(), 8);
+	EXPECT_EQ(parseExpresion("1+7"), 8);
 
-	std::string simpleCase4 = "1+1+4-9+6";
-	auto parser4 = ASTParser(simpleCase4);
-	auto AST4 = parser4.ParseString();
-	EXPECT_EQ(AST4->Evaluate(), 3);
+	EXPECT_EQ(parseExpresion("1+1+4-9+6"), 3);
 
-	std::string simpleCase5 = "1-1+4-9+6-9+8";
-	auto parser5 = ASTParser(simpleCase5);
-	auto AST5 = parser5.ParseString();
-	EXPECT_EQ(AST5->Evaluate(), 0);
+	EXPECT_EQ(parseExpresion("1-1+4-9+6-9+8"), 0);
 }
