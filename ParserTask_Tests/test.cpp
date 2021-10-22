@@ -3,6 +3,7 @@
 #include <memory>
 #include "..\ParserTask\BinaryOperator.h"
 #include "..\ParserTask\Number.h"
+#include "..\ParserTask\ASTParser.h"
 
 auto make_number = [](int num)
 {
@@ -52,8 +53,7 @@ TEST(SimpleCases, BinaryOperatorMinus)
 	EXPECT_EQ(TestMinus(10, 90), -80);
 
 }
-TEST(SimpleCases, BinaryOperatorMultiplies
-)
+TEST(SimpleCases, BinaryOperatorMultiplies)
 {
 	using Multiplies = BinaryOperator<std::multiplies<void>>;
 	auto TestMultiplies = [](int leftArg, int rightArg)
@@ -65,4 +65,32 @@ TEST(SimpleCases, BinaryOperatorMultiplies
 	EXPECT_EQ(TestMultiplies(100, -100), -10000);
 	EXPECT_EQ(TestMultiplies(11, 90), 990);
 
+}
+
+TEST(OnlySumAndMinusCases, ASTParser)
+{
+	std::string simpleCase1 = "1+2+3";
+	auto parser1 = ASTParser(simpleCase1);
+	auto AST1 = parser1.ParseString();
+	EXPECT_EQ(AST1->Evaluate(), 6);
+
+	std::string simpleCase2 = "1+5-9";
+	auto parser2 = ASTParser(simpleCase2);
+	auto AST2 = parser2.ParseString();
+	EXPECT_EQ(AST2->Evaluate(), -3);
+
+	std::string simpleCase3 = "1+7";
+	auto parser3 = ASTParser(simpleCase3);
+	auto AST3 = parser3.ParseString();
+	EXPECT_EQ(AST3->Evaluate(), 8);
+
+	std::string simpleCase4 = "1+1+4-9+6";
+	auto parser4 = ASTParser(simpleCase4);
+	auto AST4 = parser4.ParseString();
+	EXPECT_EQ(AST4->Evaluate(), 3);
+
+	std::string simpleCase5 = "1-1+4-9+6-9+8";
+	auto parser5 = ASTParser(simpleCase5);
+	auto AST5 = parser5.ParseString();
+	EXPECT_EQ(AST5->Evaluate(), 0);
 }
