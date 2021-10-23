@@ -101,4 +101,12 @@ TEST(AllBinaryOperatorTests, Parser)
 
 	EXPECT_EQ(parseExpresion("2*2-1"), 3);
 
+	EXPECT_EQ(parseExpresion("2*2*1"), 4);
+
+	EXPECT_EQ(parseExpresion("2+2+1*2*2"), 8);
+
+	EXPECT_EQ(parseExpresion("2+2*5+2*2"), 16);
+
+	EXPECT_EQ(parseExpresion("2-2+1*2-2"), 0);
+
 }
