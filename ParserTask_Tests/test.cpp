@@ -66,16 +66,14 @@ TEST(SimpleCases, BinaryOperatorMultiplies)
 	EXPECT_EQ(TestMultiplies(11, 90), 990);
 
 }
-
+auto parseExpresion = [](std::string expresion)
+{
+	auto parser = ASTParser(expresion);
+	auto AST1 = parser.ParseString();
+	return AST1->Evaluate();
+};
 TEST(OnlySumAndMinusCases, ASTParser)
 {
-	auto parseExpresion = [](std::string expresion)
-	{
-		auto parser = ASTParser(expresion);
-		auto AST1 = parser.ParseString();
-		return AST1->Evaluate();
-	};
-	
 	EXPECT_EQ(parseExpresion("1+2+3"), 6);
 
 	EXPECT_EQ(parseExpresion("1+5-9"), -3);
@@ -85,4 +83,19 @@ TEST(OnlySumAndMinusCases, ASTParser)
 	EXPECT_EQ(parseExpresion("1+1+4-9+6"), 3);
 
 	EXPECT_EQ(parseExpresion("1-1+4-9+6-9+8"), 0);
+}
+
+TEST(AllBinaryOperatorTests, Parser)
+{
+	EXPECT_EQ(parseExpresion("1+2*3"), 7);
+	
+	EXPECT_EQ(parseExpresion("1+2*3+2"), 9);
+	
+	EXPECT_EQ(parseExpresion("1-2*3+5"), 0);
+	
+	EXPECT_EQ(parseExpresion("1+5/2-1"), 2);
+
+
+
+
 }
