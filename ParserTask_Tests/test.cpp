@@ -110,3 +110,19 @@ TEST(AllBinaryOperatorTests, Parser)
 	EXPECT_EQ(parseExpresion("2-2+1*2-2"), 0);
 
 }
+
+
+TEST(ParenthesisExpresions, Parser)
+{
+	EXPECT_EQ(parseExpresion("(1+2)*3"), 9);
+
+	EXPECT_EQ(parseExpresion("(1+2*3)+2"), 9);
+	//
+	EXPECT_EQ(parseExpresion("1-2*(3+5)"), -15);
+
+	EXPECT_EQ(parseExpresion("(1-2)*3*(2*2)+5"), -7);
+	//
+	EXPECT_EQ(parseExpresion("(1+5/2)*2-1"), 5);
+
+
+}
