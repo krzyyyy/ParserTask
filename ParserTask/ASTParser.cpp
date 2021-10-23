@@ -34,14 +34,16 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 	{
 		return leftArg;
 	}
+
+	while (*_currentCharacter == '*' || *_currentCharacter == '/')
+	{
+		leftArg = ParseMulOrDivOperator(std::move(leftArg));
+
+	}
 	char op = *_currentCharacter;
 	++_currentCharacter;
 	int currentOperatorPriority = _operatorPriority.at(op);
 	auto subTree = ParseNumber();
-	if (op == '*' || op == '/')
-	{
-		subTree = ParseMulOrDivOperator(std::move(subTree));
-	}
 	int nextOperatorPriority = -1;
 	if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
 	{

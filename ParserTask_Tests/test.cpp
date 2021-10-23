@@ -101,7 +101,4 @@ TEST(AllBinaryOperatorTests, Parser)
 
 	EXPECT_EQ(parseExpresion("2*2-1"), 3);
 
-
-
-
 }
