@@ -6,8 +6,9 @@
 
 std::unique_ptr<IASTNode> ASTParser::ParseString()
 {
-
-    return ParseBinaryOperator(ParseNumber());
+	auto leftArg = ParseNumber();
+	leftArg = RollUpMulOrDiv(std::move(leftArg));
+    return ParseBinaryOperator(std::move(leftArg));
 }
 
 ASTParser::ASTParser(const std::string& expresion, std::map<char, int> operatorPriority):
@@ -35,15 +36,11 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 		return leftArg;
 	}
 
-	while (*_currentCharacter == '*' || *_currentCharacter == '/')
-	{
-		leftArg = ParseMulOrDivOperator(std::move(leftArg));
-
-	}
 	char op = *_currentCharacter;
 	++_currentCharacter;
 	int currentOperatorPriority = _operatorPriority.at(op);
 	auto subTree = ParseNumber();
+	subTree = RollUpMulOrDiv(std::move(subTree));
 	int nextOperatorPriority = -1;
 	if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
 	{
@@ -61,15 +58,6 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 			throw std::invalid_argument("Nieznany operator");
 			break;
 		}
-	}
-	char nextOp = *_currentCharacter;
-	nextOperatorPriority = _operatorPriority.at(nextOp);
-	while (nextOp == '*' || nextOp == '/')
-	{
-		subTree = ParseMulOrDivOperator(std::move(subTree));
-		if (_currentCharacter == _expresion.cend())
-			break;
-		nextOp = *_currentCharacter;
 	}
 	switch (op)
 	{
@@ -103,6 +91,20 @@ std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTN
 		return std::make_unique< BinaryOperator<std::divides<void>>>(std::move(leftArg), std::move(subTree));
 	}
 	return std::unique_ptr<IASTNode>();
+}
+
+std::unique_ptr<IASTNode> ASTParser::RollUpMulOrDiv(std::unique_ptr<IASTNode> leftArg)
+{
+	while (_currentCharacter != _expresion.cend() &&(*_currentCharacter == '*' || *_currentCharacter == '/'))
+	{
+		leftArg = ParseMulOrDivOperator(std::move(leftArg));
+		if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
+		{
+			return leftArg;
+		}
+
+	}
+	return leftArg;
 }
 
 std::unique_ptr<IASTNode> ASTParser::MakeBinaryOp(std::unique_ptr<IASTNode> leftArg, std::unique_ptr<IASTNode> rightArg, char op) const
