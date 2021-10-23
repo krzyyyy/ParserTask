@@ -70,7 +70,9 @@ auto parseExpresion = [](std::string expresion)
 {
 	auto parser = ASTParser(expresion);
 	auto AST1 = parser.ParseString();
-	return AST1->Evaluate();
+	int result = AST1->Evaluate();
+	std::cout << result << std::endl;
+	return result;
 };
 TEST(OnlySumAndMinusCases, ASTParser)
 {
@@ -90,10 +92,14 @@ TEST(AllBinaryOperatorTests, Parser)
 	EXPECT_EQ(parseExpresion("1+2*3"), 7);
 	
 	EXPECT_EQ(parseExpresion("1+2*3+2"), 9);
-	
+	//
 	EXPECT_EQ(parseExpresion("1-2*3+5"), 0);
-	
-	EXPECT_EQ(parseExpresion("1+5/2-1"), 2);
+
+	EXPECT_EQ(parseExpresion("1-2*3*2*2+5"), -18);
+	//
+	EXPECT_EQ(parseExpresion("1+5/2*2-1"), 4);
+
+	EXPECT_EQ(parseExpresion("2*2-1"), 3);
 
 
 
