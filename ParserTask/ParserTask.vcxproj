@@ -142,13 +142,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ASTParser.cpp" />
-    <ClCompile Include="Context.cpp" />
-    <ClCompile Include="ParserTask.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASTParser.h" />
     <ClInclude Include="BinaryOperator.h" />
-    <ClInclude Include="Context.h" />
     <ClInclude Include="IASTNode.h" />
     <ClInclude Include="Number.h" />
   </ItemGroup>

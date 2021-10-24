@@ -13,32 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Operations">
+    <Filter Include="Header Files\ASTNodes">
       <UniqueIdentifier>{7b0fcf4e-4035-46f4-bd08-b9acac38f595}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Operations">
-      <UniqueIdentifier>{76f52635-726f-4f3e-8b1a-e6c8fec54fe1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParserTask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Context.cpp">
+    <ClCompile Include="ASTParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IASTNode.h">
-      <Filter>Header Files\Operations</Filter>
+      <Filter>Header Files\ASTNodes</Filter>
     </ClInclude>
     <ClInclude Include="BinaryOperator.h">
-      <Filter>Header Files\Operations</Filter>
+      <Filter>Header Files\ASTNodes</Filter>
     </ClInclude>
     <ClInclude Include="Number.h">
+      <Filter>Header Files\ASTNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ASTParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
