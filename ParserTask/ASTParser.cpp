@@ -16,7 +16,7 @@ ASTParser::ASTParser(const std::string& expresion, std::map<char, int> operatorP
 	_currentCharacter(_expresion.cbegin()),
 	_operatorPriority(operatorPriority)
 {
-
+	_expresion.erase(std::remove_if(_expresion.begin(), _expresion.end(), ::isspace), _expresion.end());// removing white spaces
 }
 
 bool ASTParser::EndOfExpresion() const
