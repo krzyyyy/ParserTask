@@ -21,7 +21,7 @@ ASTParser::ASTParser(const std::string& expresion):
 void ASTParser::ThrowExceptionWithMessage() const
 {
 	auto exceptionMessage = std::string(_expresion.cbegin(), _currentCharacter);
-	exceptionMessage += " <------ Unknown character";
+	exceptionMessage += " <------ Invalid syntax";
 	throw std::invalid_argument(exceptionMessage);
 }
 

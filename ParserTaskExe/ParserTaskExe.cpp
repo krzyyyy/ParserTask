@@ -18,9 +18,14 @@ int main(int argc, char* argv[])
         int result = AST->Evaluate();
         std::cout << result << std::endl;
     }
-    catch (const std::invalid_argument&)
+    catch (const std::invalid_argument& exception)
     {
-        std::cout << "Invalid expresion" << std::endl;
+        std::cout << "Invalid expresion:" << std::endl;
+        std::cout << exception.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cout << "Unnown error" << std::endl;
     }
     
     return 0;
