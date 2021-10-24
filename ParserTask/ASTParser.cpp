@@ -6,7 +6,7 @@
 
 std::unique_ptr<IASTNode> ASTParser::ParseString()
 {
-	auto leftArg = ParseNumber();
+	auto leftArg = ParseSubExpresion();
 	leftArg = RollUpMulOrDiv(std::move(leftArg));
     return ParseBinaryOperator(std::move(leftArg));
 }
@@ -19,11 +19,40 @@ ASTParser::ASTParser(const std::string& expresion, std::map<char, int> operatorP
 
 }
 
+bool ASTParser::EndOfExpresion() const
+{
+	return (_currentCharacter == _expresion.cend() || *_currentCharacter == ')');
+}
+
+std::unique_ptr<IASTNode> ASTParser::ParseSubExpresion()
+{
+	if (std::isdigit(*_currentCharacter))
+	{
+		return ParseNumber();
+	}
+	else if (*_currentCharacter == '(')
+	{
+		return ParseParenthesis();
+	}
+	throw std::invalid_argument("Incorrect character");
+	return nullptr;
+}
+
+std::unique_ptr<IASTNode> ASTParser::ParseParenthesis()
+{
+	++_currentCharacter;// delete '('
+	auto parenthesisExpresion = ParseString();
+	if (*_currentCharacter != ')')
+	{
+		throw std::invalid_argument("Incorrect character");
+	}
+	++_currentCharacter;//delete ')'
+	return parenthesisExpresion;
+}
+
 std::unique_ptr<IASTNode> ASTParser::ParseNumber()
 {
 	char number = *_currentCharacter;
-	if (!std::isdigit(number))
-		throw std::invalid_argument("  fsdf");
 	//nastêpna pozycja
 	++_currentCharacter;
 	return std::make_unique<Number>(number - '0');
@@ -31,7 +60,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseNumber()
 
 std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNode> leftArg)
 {
-	if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
+	if (EndOfExpresion()) // warunek koñcz¹cy rekursywne wywolywanie
 	{
 		return leftArg;
 	}
@@ -39,10 +68,10 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 	char op = *_currentCharacter;
 	++_currentCharacter;
 	int currentOperatorPriority = _operatorPriority.at(op);
-	auto subTree = ParseNumber();
+	auto subTree = ParseSubExpresion();
 	subTree = RollUpMulOrDiv(std::move(subTree));
 	int nextOperatorPriority = -1;
-	if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
+	if (EndOfExpresion()) // warunek koñcz¹cy rekursywne wywolywanie
 	{
 		switch (op)
 		{
@@ -82,7 +111,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTN
 	char op = *_currentCharacter;
 	++_currentCharacter;
 	int currentOperatorPriority = _operatorPriority.at(op);
-	auto subTree = ParseNumber();
+	auto subTree = ParseSubExpresion();
 	switch (op)
 	{
 	case '*':
@@ -95,10 +124,10 @@ std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTN
 
 std::unique_ptr<IASTNode> ASTParser::RollUpMulOrDiv(std::unique_ptr<IASTNode> leftArg)
 {
-	while (_currentCharacter != _expresion.cend() &&(*_currentCharacter == '*' || *_currentCharacter == '/'))
+	while (!EndOfExpresion() &&(*_currentCharacter == '*' || *_currentCharacter == '/'))
 	{
 		leftArg = ParseMulOrDivOperator(std::move(leftArg));
-		if (_currentCharacter == _expresion.cend()) // warunek koñcz¹cy rekursywne wywolywanie
+		if (EndOfExpresion()) // warunek koñcz¹cy rekursywne wywolywanie
 		{
 			return leftArg;
 		}
