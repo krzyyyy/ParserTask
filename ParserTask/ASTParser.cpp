@@ -68,20 +68,6 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 	++_currentCharacter;
 	auto subTree = ParseSubExpresion();
 	subTree = RollUpMulOrDiv(std::move(subTree));
-	int nextOperatorPriority = -1;
-	if (EndOfExpresion()) // warunek koñcz¹cy rekursywne wywolywanie
-	{
-		switch (op)
-		{
-		case '+':
-			return std::make_unique< BinaryOperator<std::plus<void>>>(std::move(leftArg), std::move(subTree));
-		case '-':
-			return std::make_unique< BinaryOperator<std::minus<void>>>(std::move(leftArg), std::move(subTree));
-		default:
-			throw std::invalid_argument("Nieznany operator");
-			break;
-		}
-	}
 	switch (op)
 	{
 	case '+':
@@ -93,7 +79,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 		break;
 	}
 
-	return std::unique_ptr<IASTNode>();
+	return nullptr;
 }
 
 std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTNode> leftArg)
@@ -120,11 +106,6 @@ std::unique_ptr<IASTNode> ASTParser::RollUpMulOrDiv(std::unique_ptr<IASTNode> le
 	while (!EndOfExpresion() &&(*_currentCharacter == '*' || *_currentCharacter == '/'))
 	{
 		leftArg = ParseMulOrDivOperator(std::move(leftArg));
-		if (EndOfExpresion()) // warunek koñcz¹cy rekursywne wywolywanie
-		{
-			return leftArg;
-		}
-
 	}
 	return leftArg;
 }
