@@ -18,6 +18,13 @@ ASTParser::ASTParser(const std::string& expresion):
 	_expresion.erase(std::remove_if(_expresion.begin(), _expresion.end(), ::isspace), _expresion.end());// removing white spaces
 }
 
+void ASTParser::ThrowExceptionWithMessage() const
+{
+	auto exceptionMessage = std::string(_expresion.cbegin(), _currentCharacter);
+	exceptionMessage += " <------ Unknown character";
+	throw std::invalid_argument(exceptionMessage);
+}
+
 bool ASTParser::EndOfExpresion() const
 {
 	return (_currentCharacter == _expresion.cend() || *_currentCharacter == ')');
@@ -33,7 +40,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseSubExpresion()
 	{
 		return ParseParenthesis();
 	}
-	throw std::invalid_argument("Incorrect character");
+	ThrowExceptionWithMessage();
 	return nullptr;
 }
 
@@ -43,7 +50,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseParenthesis()
 	auto parenthesisExpresion = ParseString();
 	if (*_currentCharacter != ')')
 	{
-		throw std::invalid_argument("Incorrect character");
+		ThrowExceptionWithMessage();
 	}
 	++_currentCharacter;//delete ')'
 	return parenthesisExpresion;
@@ -75,7 +82,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 	case '-':
 		return std::make_unique< BinaryOperator<std::minus<void>>>(ParseBinaryOperator(std::move(leftArg)), std::move(subTree));
 	default:
-		throw std::invalid_argument("Nieznany operator");
+		ThrowExceptionWithMessage();
 		break;
 	}
 
@@ -95,7 +102,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTN
 		return std::make_unique< BinaryOperator<std::divides<void>>>(std::move(leftArg), std::move(subTree));
 	default:
 	{
-		throw std::invalid_argument("");
+		ThrowExceptionWithMessage();
 	}
 	}
 	return std::unique_ptr<IASTNode>();
