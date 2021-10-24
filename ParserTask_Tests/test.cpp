@@ -132,8 +132,15 @@ TEST(ParenthesisExpresions, Parser)
 	EXPECT_EQ(parseExpresion("( ( 5 / 5 *  5 / 5 * 5  / 5))"), 1);
 
 	EXPECT_EQ(parseExpresion("(   (5 + 6) / (2 + 5))"), 1);
+}
 
+TEST(InvalidExpresions, Parser)
+{
+	EXPECT_THROW(parseExpresion("(1+2)*(-3)"), std::invalid_argument);
 
+	EXPECT_THROW(parseExpresion("(11+2)*3"), std::invalid_argument);
 
+	EXPECT_THROW(parseExpresion("(1+-1)*3"), std::invalid_argument);
 
+	EXPECT_THROW(parseExpresion("(1+2)(3)*3"), std::invalid_argument);
 }
