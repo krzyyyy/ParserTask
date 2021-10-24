@@ -11,10 +11,9 @@ std::unique_ptr<IASTNode> ASTParser::ParseString()
     return ParseBinaryOperator(std::move(leftArg));
 }
 
-ASTParser::ASTParser(const std::string& expresion, std::map<char, int> operatorPriority):
+ASTParser::ASTParser(const std::string& expresion):
 	_expresion(expresion),
-	_currentCharacter(_expresion.cbegin()),
-	_operatorPriority(operatorPriority)
+	_currentCharacter(_expresion.cbegin())
 {
 	_expresion.erase(std::remove_if(_expresion.begin(), _expresion.end(), ::isspace), _expresion.end());// removing white spaces
 }
@@ -67,7 +66,6 @@ std::unique_ptr<IASTNode> ASTParser::ParseBinaryOperator(std::unique_ptr<IASTNod
 
 	char op = *_currentCharacter;
 	++_currentCharacter;
-	int currentOperatorPriority = _operatorPriority.at(op);
 	auto subTree = ParseSubExpresion();
 	subTree = RollUpMulOrDiv(std::move(subTree));
 	int nextOperatorPriority = -1;
@@ -110,7 +108,6 @@ std::unique_ptr<IASTNode> ASTParser::ParseMulOrDivOperator(std::unique_ptr<IASTN
 {
 	char op = *_currentCharacter;
 	++_currentCharacter;
-	int currentOperatorPriority = _operatorPriority.at(op);
 	auto subTree = ParseSubExpresion();
 	switch (op)
 	{
