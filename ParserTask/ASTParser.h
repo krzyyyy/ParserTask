@@ -21,6 +21,5 @@ private:
 	std::unique_ptr<IASTNode> ParseBinaryOperator(std::unique_ptr<IASTNode> leftArg);
 	std::unique_ptr<IASTNode> ParseMulOrDivOperator(std::unique_ptr<IASTNode> leftArg);
 	std::unique_ptr<IASTNode> RollUpMulOrDiv(std::unique_ptr<IASTNode> leftArg);
-	std::unique_ptr<IASTNode> MakeBinaryOp(std::unique_ptr<IASTNode> leftArg, std::unique_ptr<IASTNode> rightArg, char op)const;
 };
 
