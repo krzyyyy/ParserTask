@@ -71,7 +71,6 @@ auto parseExpresion = [](std::string expresion)
 	auto parser = ASTParser(expresion);
 	auto AST1 = parser.ParseString();
 	int result = AST1->Evaluate();
-	std::cout << result << std::endl;
 	return result;
 };
 TEST(OnlySumAndMinusCases, ASTParser)
@@ -129,6 +128,10 @@ TEST(ParenthesisExpresions, Parser)
 	EXPECT_EQ(parseExpresion("((((0))))"), 0);
 	
 	EXPECT_EQ(parseExpresion("((2+5)/(2+5))"), 1);
+
+	EXPECT_EQ(parseExpresion("( ( 5 / 5 *  5 / 5 * 5  / 5))"), 1);
+
+	EXPECT_EQ(parseExpresion("(   (5 + 6) / (2 + 5))"), 1);
 
 
 
