@@ -48,7 +48,7 @@ std::unique_ptr<IASTNode> ASTParser::ParseParenthesis()
 {
 	++_currentCharacter;// delete '('
 	auto parenthesisExpresion = ParseString();
-	if (*_currentCharacter != ')')
+	if (_currentCharacter == _expresion.cend() || *_currentCharacter != ')')
 	{
 		ThrowExceptionWithMessage();
 	}

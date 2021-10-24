@@ -143,4 +143,6 @@ TEST(InvalidExpresions, Parser)
 	EXPECT_THROW(parseExpresion("(1+-1)*3"), std::invalid_argument);
 
 	EXPECT_THROW(parseExpresion("(1+2)(3)*3"), std::invalid_argument);
+
+	EXPECT_THROW(parseExpresion("((1+2)"), std::invalid_argument);
 }
