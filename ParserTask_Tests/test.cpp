@@ -124,5 +124,13 @@ TEST(ParenthesisExpresions, Parser)
 	//
 	EXPECT_EQ(parseExpresion("(1+5/2)*2-1"), 5);
 
+	EXPECT_EQ(parseExpresion("(4+5*(7-3))-2"), 22);
+	
+	EXPECT_EQ(parseExpresion("((((0))))"), 0);
+	
+	EXPECT_EQ(parseExpresion("((2+5)/(2+5))"), 1);
+
+
+
 
 }
